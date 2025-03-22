@@ -7,7 +7,12 @@ export class AppController {
 
   @Post('register')
   async postRegister(@Body() body: any) {
-    const { type, name, password, turma } = body;
+    const { type, name, password, turma } = body as {
+      type: string;
+      name: string;
+      password: string;
+      turma: number;
+    };
 
     switch (type) {
       case 'aluno': {
