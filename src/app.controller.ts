@@ -128,4 +128,30 @@ export class AppController {
       }
     }
   }
+
+  @Post('createMateria')
+  async createMateria(@Body() body: any) {
+    const { title, professorId, turmaId } = body as {
+      title: string;
+      professorId: number;
+      turmaId: number;
+    };
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
+      const novaMateria = await this.prisma.materia.create({
+        data: {
+          title,
+          turma: { connect: { id: turmaId } },
+          professor: { connect: { id: professorId } },
+        },
+      });
+
+      return {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        novaMateria,
+      };
+    } catch (error) {
+      console.log(error);
+    }
+  }
 }
