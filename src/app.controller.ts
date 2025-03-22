@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
 import { PrismaService } from './database/prisma.service';
 
 @Controller()
@@ -6,7 +6,7 @@ export class AppController {
   constructor(private prisma: PrismaService) {}
 
   @Post('register')
-  async postRegister(@Body() body: any) {
+  async register(@Body() body: any) {
     const { type, name, password, turma } = body as {
       type: string;
       name: string;
@@ -45,6 +45,36 @@ export class AppController {
           error: 'Tipo de cadastro',
         };
       }
+    }
+  }
+
+  @Get('login')
+  async login(@Body() body: any) {
+    const { name, password } = body as { name: string; password: string };
+    try {
+      const login = await this.prisma.aluno.findFirst({
+        where: {
+          name,
+          password,
+        },
+      });
+      switch (login?.id == undefined) {
+        case true: {
+          return {
+            mensagem: `Credenciais incorretas`,
+          };
+        }
+        case false: {
+          return {
+            mensagem: `Seja bem vindo ${login?.id}`,
+            id: login?.id,
+          };
+        }
+      }
+    } catch (error) {
+      return {
+        mensagem: `Erro no login: ${error}`,
+      };
     }
   }
 }
