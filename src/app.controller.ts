@@ -7,11 +7,11 @@ export class AppController {
 
   @Post('register')
   async register(@Body() body: any) {
-    const { type, name, password, turma } = body as {
+    const { type, name, password, turmaId } = body as {
       type: string;
       name: string;
       password: string;
-      turma: number;
+      turmaId: number;
     };
 
     if (password.length <= 7) {
@@ -25,7 +25,9 @@ export class AppController {
             data: {
               name,
               password,
-              turma,
+              turma: {
+                connect: { id: turmaId },
+              },
             },
           });
           return {
@@ -100,6 +102,30 @@ export class AppController {
       return {
         mensagem: `Erro no login: ${error}`,
       };
+    }
+  }
+
+  @Post('createTurma')
+  async createTurma() {
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
+      const novaTurma = await this.prisma.turma.create({
+        data: {},
+      });
+
+      return {
+        mensagem: 'Turma criada com sucesso',
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
+        turmaId: novaTurma.id,
+      };
+    } catch (e: unknown) {
+      if (e instanceof Error) {
+        console.error('Erro ao criar turma:', e.message);
+        throw new Error(`Erro ao criar turma: ${e.message}`);
+      } else {
+        console.error('Erro desconhecido ao criar turma');
+        throw new Error('Erro desconhecido ao criar turma');
+      }
     }
   }
 }

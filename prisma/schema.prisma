@@ -11,14 +11,34 @@ datasource db {
 }
 
 model Aluno {
-  id       Int @id @default(autoincrement())
+  id       Int    @id @default(autoincrement())
   name     String
   password String
-  turma    Int
+  turmaId  Int
+  turma    Turma?  @relation(fields: [turmaId], references: [id])
 }
 
 model Professor {
-  id       Int @id @default(autoincrement())
+  id       Int    @id @default(autoincrement())
   name     String
   password String
+
+  Materias Materia[]
+}
+
+model Materia {
+  id          Int       @id @default(autoincrement())
+  createdAt   DateTime  @default(now())
+  title       String
+  professor   Professor @relation(fields: [professorId], references: [id])
+  professorId Int
+
+  turma   Turma @relation(fields: [turmaId], references: [id])
+  turmaId Int
+}
+
+model Turma {
+  id       Int       @id @default(autoincrement())
+  alunos   Aluno[]
+  materias Materia[]
 }
