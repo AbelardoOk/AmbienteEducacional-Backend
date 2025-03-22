@@ -58,23 +58,42 @@ export class AppController {
   async login(@Body() body: any) {
     const { name, password } = body as { name: string; password: string };
     try {
-      const login = await this.prisma.aluno.findFirst({
+      const loginAluno = await this.prisma.aluno.findFirst({
         where: {
           name,
           password,
         },
       });
-      switch (login?.id == undefined) {
-        case true: {
-          return {
-            mensagem: `Credenciais incorretas`,
-          };
-        }
+      switch (loginAluno?.id == undefined) {
         case false: {
           return {
-            mensagem: `Seja bem vindo ${login?.id}`,
-            id: login?.id,
+            mensagem: `Seja bem vindo ${name}`,
+            id: loginAluno?.id,
           };
+          break;
+        }
+        case true: {
+          const loginProfessor = await this.prisma.professor.findFirst({
+            where: {
+              name,
+              password,
+            },
+          });
+
+          switch (loginProfessor?.id == undefined) {
+            case true: {
+              return {
+                mensagem: `Credenciais incorretas`,
+              };
+            }
+            case false: {
+              return {
+                mensagem: `Seja bem vindo Prof(a) ${name}`,
+                id: loginProfessor?.id,
+              };
+            }
+          }
+          break;
         }
       }
     } catch (error) {
