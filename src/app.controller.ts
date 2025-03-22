@@ -14,36 +14,42 @@ export class AppController {
       turma: number;
     };
 
-    switch (type) {
-      case 'aluno': {
-        const aluno = await this.prisma.aluno.create({
-          data: {
-            name,
-            password,
-            turma,
-          },
-        });
-        return {
-          aluno,
-        };
-      }
+    if (password.length <= 7) {
+      return {
+        message: 'É preciso ter no mínimo 8 caracteres!',
+      };
+    } else {
+      switch (type) {
+        case 'aluno': {
+          const aluno = await this.prisma.aluno.create({
+            data: {
+              name,
+              password,
+              turma,
+            },
+          });
+          return {
+            aluno,
+          };
+        }
 
-      case 'professor': {
-        const professor = await this.prisma.professor.create({
-          data: {
-            name,
-            password,
-          },
-        });
-        return {
-          professor,
-        };
-      }
+        case 'professor': {
+          const professor = await this.prisma.professor.create({
+            data: {
+              name,
+              password,
+            },
+          });
+          return {
+            professor,
+          };
+        }
 
-      default: {
-        return {
-          error: 'Tipo de cadastro',
-        };
+        default: {
+          return {
+            error: 'Tipo de cadastro',
+          };
+        }
       }
     }
   }
