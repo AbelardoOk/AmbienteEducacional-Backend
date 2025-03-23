@@ -56,7 +56,7 @@ export class AppController {
     }
   }
 
-  @Get('login')
+  @Post('login')
   async login(@Body() body: any) {
     const { name, password } = body as { name: string; password: string };
     try {
@@ -152,7 +152,7 @@ export class AppController {
     }
   }
 
-  @Get('listMaterias')
+  @Post('listMaterias')
   async listMaterias(@Body() body: any) {
     const { turmaId } = body as { turmaId: number };
     try {
