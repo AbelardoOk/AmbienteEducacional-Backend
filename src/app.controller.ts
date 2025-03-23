@@ -151,4 +151,22 @@ export class AppController {
       console.log(error);
     }
   }
+
+  @Get('listMaterias')
+  async listMaterias(@Body() body: any) {
+    const { turmaId } = body as { turmaId: number };
+    try {
+      const turma = await this.prisma.turma.findUnique({
+        where: { id: turmaId },
+        include: { materias: true },
+      });
+
+      const materias = turma?.materias;
+      return { materias };
+    } catch (e) {
+      return {
+        error: `Erro inesperado: ${e}`,
+      };
+    }
+  }
 }

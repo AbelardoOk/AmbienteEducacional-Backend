@@ -7,4 +7,7 @@ export class PrismaService extends PrismaClient implements OnModuleInit {
     await this.$connect();
     console.log('Conectado ao banco de dados Neon! 🚀');
   }
+  async onModuleDestroy() {
+    await this.$disconnect();
+  }
 }
