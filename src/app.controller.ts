@@ -108,14 +108,13 @@ export class AppController {
   @Post('createTurma')
   async createTurma() {
     try {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
       const novaTurma = await this.prisma.turma.create({
         data: {},
       });
 
       return {
         mensagem: 'Turma criada com sucesso',
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
+
         turmaId: novaTurma.id,
       };
     } catch (e: unknown) {
@@ -137,7 +136,6 @@ export class AppController {
       turmaId: number;
     };
     try {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
       const novaMateria = await this.prisma.materia.create({
         data: {
           title,
@@ -147,7 +145,6 @@ export class AppController {
       });
 
       return {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         novaMateria,
       };
     } catch (error) {
