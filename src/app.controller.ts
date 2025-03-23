@@ -16,7 +16,7 @@ export class AppController {
 
     if (password.length <= 7) {
       return {
-        message: 'É preciso ter no mínimo 8 caracteres!',
+        error: 'É preciso ter no mínimo 8 caracteres!',
       };
     } else {
       switch (type) {
